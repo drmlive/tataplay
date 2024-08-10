@@ -1,5 +1,5 @@
 <?php
-header("Cache-Control: max-age=20, public");
+header("Cache-Control: max-age=84000, public");
 header('Content-Type: audio/x-mpegurl');
 header('Content-Disposition: attachment; filename="playlist.m3u"');
 function getAllChannelInfo(): array {
