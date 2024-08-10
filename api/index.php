@@ -1,6 +1,7 @@
 <?php
 error_reporting(0);
 ini_set('display_errors', 0);
+header("Cache-Control: max-age=300, public");
 function fetchData(string $url): ?string {
     return ($data = @file_get_contents($url)) !== false ? trim($data) : null;
 }
