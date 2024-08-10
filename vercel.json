@@ -7,15 +7,24 @@
   "routes": [
     {
       "src": "/(.*)\\.mpd",
-      "dest": "/api/index.php?id=$1"
+      "dest": "/api/index.php?id=$1",
+      "headers": {
+        "Cache-Control": "max-age=20, public"
+      }
     },
     {
       "src": "/(.*)\\.m3u8",
-      "dest": "/api/index.php?id=$1"
+      "dest": "/api/index.php?id=$1",
+      "headers": {
+        "Cache-Control": "max-age=20, public"
+      }
     },
     {
       "src": "/",
-      "dest": "/api/playlist.php"
+      "dest": "/api/playlist.php",
+      "headers": {
+        "Cache-Control": "max-age=84000, public"
+      }
     }
   ]
 }
