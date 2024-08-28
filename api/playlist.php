@@ -132,89 +132,93 @@ https://la.drmlive.au/tp/sliv.php?id=marathi
 https://la.drmlive.au/tp/sliv.php?id=aath
 
 #EXTINF:-1 tvg-id="144" group-title="Entertainment" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/colors-hindi--16x9-1714557869344.jpg",Colors HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/144.m3u8
 #EXTINF:-1 tvg-id="1370" group-title="Entertainment" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/collors-rishtey-live-channels-16x9-3-1642676080416-1674198105431-1697532377978.jpg",Rishtey
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsRishtey/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1370.m3u8
 #EXTINF:-1 tvg-id="756" group-title="Entertainment" tvg-language="Bengali" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-bangla-new-16x9-4-1649659533344.jpg",Colors Bengla HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsBanglaHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/756.m3u8
 #EXTINF:-1 tvg-id="757" group-title="Entertainment" tvg-language="Kannada" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-kannada-16x9-1677754085834.jpg",Colors Kannada HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsKannadaHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/757.m3u8
 #EXTINF:-1 tvg-id="755" group-title="Entertainment" tvg-language="Marathi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-marathi-live-channels-16x9-4-6-apr-1649257093359.jpg",Colors Marathi HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsMarathiHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/755.m3u8
 #EXTINF:-1 tvg-id="196" group-title="Entertainment" tvg-language="Gujarati" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-gujarati-16x9-1713269620328.jpg",Colors Gujarati
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsGujarati/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/196.m3u8
 #EXTINF:-1 tvg-id="429" group-title="Entertainment" tvg-language="Tamil" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/ct-1644165913136.jpg",Colors Tamil HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsTamilHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/429.m3u8
 #EXTINF:-1 tvg-id="198" group-title="Entertainment" tvg-language="Odia" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-odia-live-channels-16x9-4-1642583679866.jpg",Colors Oriya
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsOriya/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/198.m3u8
+#EXTINF:-1 tvg-id="1157" group-title="Entertainment" tvg-language="English" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/comedy-central-16x9-1624419769894-1663699927285.jpg",Comedy Central HD
+https://jc.drmlive-01.workers.dev/1157.m3u8
 #EXTINF:-1 tvg-id="1158" group-title="Entertainment" tvg-language="English" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-infinity-live-channels-16x9-1642496946057.jpg",Colors Infinity HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsInfinityHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1158.m3u8
 #EXTINF:-1 tvg-id="785" group-title="Entertainment" tvg-language="Kannada" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-super-live-channels-16x9-4-1642744939924.jpg",Colors Super
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsSuperKannada/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/785.m3u8
 #EXTINF:-1 tvg-id="1477" group-title="Movies" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/Live-Tv-Channels-colors-cineplex-1607514413063.jpg",Colors Cineplex HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsCineplexHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1477.m3u8
 #EXTINF:-1 tvg-id="1450" group-title="Movies" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_960,h_540/v3Storage/assets/colors-cineplex-superhit%2016x9-1648793655358.jpg",Colors Cineplex Superhit
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_RishteyCineplex/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1450.m3u8
 #EXTINF:-1 tvg-id="1763" group-title="Movies" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/cineplex-1713963820848.jpeg",Colors Cineplex Bollywood
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsCineplexBollywood/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1763.m3u8
 #EXTINF:-1 tvg-id="1632" group-title="Movies" tvg-language="Kannada" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/colors-kannada-cinema-16x9-1713963481807.jpg",Colors Kannada Cinema
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_ColorsKannadaCinema/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1632.m3u8
 #EXTINF:-1 tvg-id="1145" group-title="Music" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/mtv-16x9-1714316345624.jpg",MTV HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_MTVHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1145.m3u8
 #EXTINF:-1 tvg-id="753" group-title="Music" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/mtv-beats-live-channels-16x9-1642675874665.jpg",MTV Beats HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_MTVBeatsHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/753.m3u8
 #EXTINF:-1 tvg-id="544" group-title="Kids" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/nick-jr-16x9-2-1626708077243.jpg",Nick Junior
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_NickJr/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/544.m3u8
 #EXTINF:-1 tvg-id="1226" group-title="Kids" tvg-language="English" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/nick-hd-plus-live-channels-16x9-4-1642585145139.jpg",Nick HD+
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_NickHD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/1226.m3u8
+#EXTINF:-1 tvg-id="1227" group-title="Kids" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/16x9-1719554242246.jpg",Nick SD
+https://jc.drmlive-01.workers.dev/1227.m3u8
 #EXTINF:-1 tvg-id="815" group-title="Kids" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/sonic-16x9-2-1626707025539.jpg",Sonic
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_SonicNick/JCHLS/index.m3u8
-#EXTINF:-1 tvg-id="1226" group-title="Sports" tvg-language="English" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/sports18_tray-1693930594270.jpg",SPORTS 18 HD
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_Sports18_1HD/JCHLS/index.m3u8
+https://jc.drmlive-01.workers.dev/815.m3u8
+#EXTINF:-1 tvg-id="122" group-title="Sports" tvg-language="English" tvg-logo="https://v3img.voot.com/resizeMedium,w_450,h_253/v3Storage/assets/sports18_tray-1693930594270.jpg",SPORTS 18 HD
+https://jc.drmlive-01.workers.dev/122.m3u8
 #EXTINF:-1 tvg-id="1998" group-title="Sports" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/sports18_khel_tray-1693931658589.jpg",SPORTS 18 Khel
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/Sports18_Khel_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/1998.m3u8
 #EXTINF:-1 tvg-id="2000" group-title="Cricket" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/jc_sports_horizontal_tray-1695561700528.jpg",JC Sports
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JC_Sports_24x7_IDC/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/2000.m3u8
 #EXTINF:-1 tvg-id="2001" group-title="Sports" tvg-language="English" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/sports_zone_cricket_horizontal-1695032322122.jpg",CricStream
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/JV_SportsHD15_DIG_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/2001.m3u8
 #EXTINF:-1 tvg-id="190" group-title="Business" tvg-language="Hindi" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/cnbc-awaaz-16x9-1702387934761.jpg",CNBC Awaaz
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/CNBC_Awaaz_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/190.m3u8
 #EXTINF:-1 tvg-id="490" group-title="Business" tvg-language="Gujarati" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/whatsapp16x9-1693491956187.jpg",CNBC Bazaar
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/CNBC_Bazaar_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/490.m3u8
 #EXTINF:-1 tvg-id="489" group-title="Business" tvg-language="English" tvg-logo="https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/cnbc18-shereen-bhan-16x9-2-1693479472079.jpg",CNBC Tv 18
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/CNBC_TV18_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/489.m3u8
 #EXTINF:-1 tvg-id="231" group-title="News" tvg-language="Hindi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/IBN_7.png",News18 India
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_India_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/231.m3u8
 #EXTINF:-1 tvg-id="492" group-title="News" tvg-language="English" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/CNN_NEWS_18.png",CNN NEWS 18
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/CNN_News18_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/492.m3u8
 #EXTINF:-1 tvg-id="615" group-title="News" tvg-language="Tamil" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/News_18_Tamilnadu.png",News18 Tamilnadu
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Tamil_Nadu_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/615.m3u8
 #EXTINF:-1 tvg-id="232" group-title="News" tvg-language="Marathi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/IBN_Lokmat.png",News18 Lokmat
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Lokmat_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/232.m3u8
 #EXTINF:-1 tvg-id="717" group-title="News" tvg-language="Bengali" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_Bangla_News.png",News18 Bangla News
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Bangla_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/717.m3u8
 #EXTINF:-1 tvg-id="653" group-title="News" tvg-language="Kannada" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_Kannada_News.png",News18 Kannada News
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Kannada_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/653.m3u8
 #EXTINF:-1 tvg-id="620" group-title="News" tvg-language="Gujarati" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_News_Gujarati.png",News18 Gujarati
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Gujarati_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/620.m3u8
 #EXTINF:-1 tvg-id="655" group-title="News" tvg-language="Hindi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_Haryana_and_HP_News.png",News18 Punjab Haryana
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Punjab_Haryana_HP_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/655.m3u8
 #EXTINF:-1 tvg-id="696" group-title="News" tvg-language="Odia" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_News_Oriya.png",News18 Oriya
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Odia_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/696.m3u8
 #EXTINF:-1 tvg-id="627" group-title="News" tvg-language="Assamese" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/News_18_Assam.png",News18 Assam
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Assam_North_East_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/627.m3u8
 #EXTINF:-1 tvg-id="965" group-title="News" tvg-language="Malayalam" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/News_18_Kerala.png",News 18 Kerala
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Kerala_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/965.m3u8
 #EXTINF:-1 tvg-id="531" group-title="News" tvg-language="Hindi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_RAJASTHAN.png",News18 RAJASTHAN
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Rajasthan_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/531.m3u8
 #EXTINF:-1 tvg-id="693" group-title="News" tvg-language="Bhojpuri" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_BIHAR.png",News18 BIHAR
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Bihar_Jharkhand_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/693.m3u8
 #EXTINF:-1 tvg-id="529" group-title="News" tvg-language="Hindi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_MP.png",News18 MP
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_MP_Chhattisgarh_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/529.m3u8
 #EXTINF:-1 tvg-id="530" group-title="News" tvg-language="Hindi" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_UP.png",News18 UP
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_UP_Uttarakhand_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/530.m3u8
 #EXTINF:-1 tvg-id="694" group-title="News" tvg-language="Urdu" tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/ETV_Urdu.png",News18 JKLH
-https://prod-sports-hin-fa.jiocinema.com/bpk-tv/News18_Urdu_voot_MOB/Fallback/index.m3u8
+https://jc.drmlive-01.workers.dev/694.m3u8
 EOT;
 echo $m3u8PlaylistFile . $additionalEntries;
 ?>
