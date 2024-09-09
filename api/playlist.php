@@ -35,7 +35,7 @@ foreach ($channels as $channel) {
     $m3u8PlaylistFile .= "#KODIPROP:inputstream.adaptive.license_type=clearkey\n";
     $m3u8PlaylistFile .= "#KODIPROP:inputstream.adaptive.license_key=https://tpck.drmlive-01.workers.dev/?id={$id}\n";
     $m3u8PlaylistFile .= "#EXTVLCOPT:http-user-agent=third-party\n";
-    $m3u8PlaylistFile .= "$playlistUrl\n\n";
+    $m3u8PlaylistFile .= "$dashUrl\n\n";
 }
 $additionalEntries = <<<EOT
 #EXTINF:-1 tvg-logo="https://mediaready.videoready.tv/tatasky-epg/image/fetch/f_auto,fl_lossy,q_auto,h_250,w_250/https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/imageContent-11073-j95e7nyo-v1/imageContent-11073-j95e7nyo-m1.png" group-title="zee",Zee TV HD
