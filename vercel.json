@@ -7,7 +7,7 @@
   "routes": [
     {
       "src": "/(.*)\\.mpd",
-      "dest": "/api/index.php?id=$1",
+      "dest": "/api/index.php?id=$1&$query",
       "headers": {
         "Cache-Control": "max-age=20, public"
       }
