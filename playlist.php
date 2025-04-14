@@ -33,6 +33,7 @@ if ($is_apache) {$htaccess_path = '.htaccess';
 foreach ($channels as $channel) {
     $channel_id = $channel['id'];
     if (in_array($channel_id, $skip_ids, true)) {continue;}
+    if (isset($channel['provider']) && $channel['provider'] === 'DistroTV') {continue;}
     $channel_name = $channel['title'];
     $channel_logo = $channel['transparentImageUrl'];
     $channel_genre = $channel['genres'][0] ?? 'General';
