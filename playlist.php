@@ -25,7 +25,10 @@ $request_uri = $_SERVER['REQUEST_URI'];
 $path = dirname($request_uri);
 $base_url = "{$protocol}://{$host_with_port}{$path}";
 $is_apache = isApacheCompatible();
-$stream_path = $is_apache ? "manifest.mpd" : "get-mpd.php";
+if ($is_apache) {$htaccess_path = '.htaccess';
+    $stream_path = file_exists($htaccess_path) ? "manifest.mpd" : "get-mpd.php";} else {
+    $stream_path = "get-mpd.php";
+}
 
 foreach ($channels as $channel) {
     $channel_id = $channel['id'];
