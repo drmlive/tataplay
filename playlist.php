@@ -39,7 +39,7 @@ foreach ($channels as $channel) {
     $channel_genre = $channel['genres'][0] ?? 'General';
     if (in_array('HD', $channel['genres'])) {$channel_genre .= ", HD";}
 
-    $license_url = "https://tpck.drmlive-01.workers.dev?id={$channel_id}";
+    $license_url = "https://tp.drmlive-01.workers.dev?id={$channel_id}";
     $channel_live = "{$base_url}/{$stream_path}?id={$channel_id}{$liveheaders}";
 
     echo "#EXTINF:-1 tvg-id=\"ts{$channel_id}\" tvg-logo=\"{$channel_logo}\" group-title=\"{$channel_genre}\",{$channel_name}\n";
