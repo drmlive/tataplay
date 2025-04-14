@@ -1,0 +1,3 @@
+RewriteEngine On
+
+RewriteRule ^manifest\.mpd$ get-mpd.php [QSA,L]
