@@ -25,13 +25,8 @@ if (!$useCache) {
     if ($response === false) { http_response_code(500); echo 'Failed to fetch content data.'; exit; }
     $responseData = json_decode($response, true);
     if (!isset($responseData['data']['dashPlayreadyPlayUrl'])) { http_response_code(404); echo 'dashPlayreadyPlayUrl not found.'; exit;}
-    $dashUrl = $responseData['data']['dashPlayreadyPlayUrl'];
-    $postData = json_encode(['dashurl' => $dashUrl]);
-    $decryptContext = stream_context_create(['http' => ['method' => 'POST','header' => "Content-Type: application/json\r\nContent-Length: " . strlen($postData),'content' => $postData,],]);
-    $decryptResponse = @file_get_contents($decryptApiUrl, false, $decryptContext);if ($decryptResponse === false) {http_response_code(502);echo 'Failed to contact decryption service.';exit;}
-    $decryptData = json_decode($decryptResponse, true);
-    $decryptedUrl = $decryptData['decrypted_url'] ?? null;
-    if (!$decryptedUrl) {http_response_code(500);echo 'Decryption failed.';exit;}
+    $encrypteddashUrl = $responseData['data']['dashPlayreadyPlayUrl'];
+    $decryptedUrl = decryptUrl($encrypteddashUrl, $aesKey);
     $decryptedUrl = str_replace('bpaicatchupta', 'bpaita', $decryptedUrl);
     if (strpos($decryptedUrl, 'bpaita') === false) {header("Location: $decryptedUrl");exit;}
     $getheaders = get_headers($decryptedUrl, 1, stream_context_create(['http' => ['method' => 'GET','header' => "User-Agent: $ua\r\n",'follow_location' => 0,'ignore_errors' => true]]));
