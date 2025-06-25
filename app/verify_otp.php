@@ -92,6 +92,19 @@ if (empty($dthStatus)) {
         "eulaChecked" => true,
         "packageId" => ""
     ]);
+} elseif ($dthStatus === "DTH Without Binge") {
+    $loginUrl = 'https://tb.tapi.videoready.tv/binge-mobile-services/api/v3/create/new/user';
+    $loginBody = json_encode([
+        "dthStatus" => "DTH Without Binge",
+        "subscriberId" => $accountDetails['subscriberId'] ?? '',
+        "login" => "OTP",
+        "mobileNumber" => $mobile,
+        "baId" => null,
+        "isPastBingeUser" => false,
+        "eulaChecked" => true,
+        "packageId" => "",
+        "referenceId" => null
+    ]);
 } else {
     $loginUrl = 'https://tb.tapi.videoready.tv/binge-mobile-services/api/v3/update/exist/user';
     $loginBody = json_encode([
