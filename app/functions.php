@@ -33,25 +33,39 @@ function extractPsshFromManifest(string $content, string $baseUrl, string $userA
 }
 
 function extractKidandpssh($hexContent) {
-    $psshMarker = "70737368";
-    $psshOffsets = [];
+    $WV_SYSTEM_ID = 'edef8ba979d64acea3c827dcd51d21ed';
+    $PR_SYSTEM_ID = '9a04f07998404286ab92e65be0885f95';
+    $CACHE_FILE = 'app/data/cache_kid.json';
+    $CACHE_TTL = 10 * 60;
+    $cache = [];
+    if (file_exists($CACHE_FILE)) {$cache = json_decode(file_get_contents($CACHE_FILE), true) ?: [];}
+    $now = time();
+    foreach ($cache as $key => $entry) {if ($now - $entry['timestamp'] > $CACHE_TTL) {unset($cache[$key]);}}
+    $psshBoxes = [];
     $offset = 0;
-    while (($offset = strpos($hexContent, $psshMarker, $offset)) !== false) {$psshOffsets[] = $offset;$offset += 8;}
-    if (count($psshOffsets) < 2) {"Error: Less than two PSSH found.\n";return null;}
-    $wvPsshOffset = $psshOffsets[0];
-    $wvHeaderSizeHex = substr($hexContent, $wvPsshOffset - 8, 8);
-    $wvHeaderSize = hexdec($wvHeaderSizeHex);
-    $wvPsshHex = substr($hexContent, $wvPsshOffset - 8, $wvHeaderSize * 2);
-    $wvKidHex = substr($wvPsshHex, 68, 32);
-    $newWvPsshHex = "000000327073736800000000edef8ba979d64acea3c827dcd51d21ed000000121210" . $wvKidHex;
-    $wvPsshBase64 = base64_encode(hex2bin($newWvPsshHex));
-    $wvKid = substr($wvKidHex, 0, 8) . "-" . substr($wvKidHex, 8, 4) . "-" . substr($wvKidHex, 12, 4) . "-" . substr($wvKidHex, 16, 4) . "-" . substr($wvKidHex, 20);
-    $prPsshOffset = $psshOffsets[1];
-    $prHeaderSizeHex = substr($hexContent, $prPsshOffset - 8, 8);
-    $prHeaderSize = hexdec($prHeaderSizeHex);
-    $prPsshHex = substr($hexContent, $prPsshOffset - 8, $prHeaderSize * 2);
-    $prPsshBase64 = base64_encode(hex2bin($prPsshHex));
-    return ['pssh' => $wvPsshBase64, 'kid' => $wvKid, 'pr_pssh' => $prPsshBase64];
+    while (($offset = strpos($hexContent, '70737368', $offset)) !== false) {
+        $headerSize = hexdec(substr($hexContent, $offset - 8, 8));
+        $psshHex = substr($hexContent, $offset - 8, $headerSize * 2);
+        $systemId = substr($psshHex, 24, 32);
+        $psshBoxes[$systemId] = $psshHex;
+        $offset += 8;
+    }
+
+    $hasWV = isset($psshBoxes[$WV_SYSTEM_ID]);
+    $hasPR = isset($psshBoxes[$PR_SYSTEM_ID]);
+    if (!$hasWV && !$hasPR) {return null;}
+    $result = ['pssh' => null,'kid' => null,'pr_pssh' => null,];
+    if ($hasWV) {
+        $wvPsshHex = $psshBoxes[$WV_SYSTEM_ID];
+        if (isset($cache[$wvPsshHex])) {
+            $wvKidHex = $cache[$wvPsshHex]['kid'];} else {$wvKidHex = json_decode(file_get_contents("https://tp.secure-kid.workers.dev/", false, stream_context_create(["http"=>["method"=>"POST","header"=>"Content-Type: application/json\r\n","content"=>json_encode(["pssh"=>$wvPsshHex])]])), true)['encryptedKID'];
+            $cache[$wvPsshHex] = ['kid' => $wvKidHex,'timestamp' => $now];}
+        $result['pssh'] = base64_encode(hex2bin($wvPsshHex));
+        $result['kid'] = substr($wvKidHex, 0, 8) . '-' . substr($wvKidHex, 8, 4) . '-' . substr($wvKidHex, 12, 4) . '-' . substr($wvKidHex, 16, 4) . '-' . substr($wvKidHex, 20);
+    }
+    if ($hasPR) {$result['pr_pssh'] = base64_encode(hex2bin($psshBoxes[$PR_SYSTEM_ID]));}
+    file_put_contents($CACHE_FILE, json_encode($cache, JSON_PRETTY_PRINT));
+    return $result;
 }
 
 function isApacheCompatible(): bool {
