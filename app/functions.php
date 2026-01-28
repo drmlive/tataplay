@@ -100,5 +100,4 @@ function decryptUrl($encryptedUrl, $aesKey) {
     return $decryptedUrl;
 }
 
-?>
 
