@@ -46,6 +46,7 @@ foreach ($channels as $channel) {
     echo "#KODIPROP:inputstream.adaptive.license_type=clearkey\n";
     echo "#KODIPROP:inputstream.adaptive.license_key={$license_url}\n";
     echo "#KODIPROP:inputstream.adaptive.manifest_type=mpd\n";
-    echo "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\n";
+    echo "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36\n";
     echo "{$channel_live}\n\n";
 }
+
