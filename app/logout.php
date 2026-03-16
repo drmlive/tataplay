@@ -43,7 +43,6 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 $response = curl_exec($ch);
 $data = json_decode($response, true);
-curl_close($ch);
 echo $data['message'];
 $loggedOut = false;
 
