@@ -31,7 +31,6 @@ if (!file_exists($credFile)) {
     ]);
 
     $guestResponse = curl_exec($ch);
-    curl_close($ch);
     $guestData = json_decode($guestResponse, true);
     $anonymousId = $guestData['data']['anonymousId'] ?? '';
 
@@ -76,6 +75,5 @@ curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 $response = curl_exec($ch);
-curl_close($ch);
 $data = json_decode($response, true);
 echo $data['message'] ?? "OTP send status unknown";
