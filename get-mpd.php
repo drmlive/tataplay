@@ -18,6 +18,8 @@ if (isset($cacheData[$id])) {
 }
 
 if (!$useCache) {
+    $mpdurl = null;
+    $hdntl = null;
     $headers = ['Authorization: Bearer ' . $userToken,'subscriberId: ' . $subscriberId,];
     $options = ['http' => ['method' => 'GET','header' => implode("\r\n", $headers),],];
     $context = stream_context_create($options);
@@ -27,12 +29,36 @@ if (!$useCache) {
     if (!isset($responseData['data']['dashPlayreadyPlayUrl'])) { http_response_code(404); echo 'dashPlayreadyPlayUrl not found.'; exit;}
     $encrypteddashUrl = $responseData['data']['dashPlayreadyPlayUrl'];
     $decryptedUrl = decryptUrl($encrypteddashUrl, $aesKey);
-    $decryptedUrl = str_replace('bpaicatchupta', 'bpaita', $decryptedUrl);
-    if (strpos($decryptedUrl, 'bpaita') === false) {header("Location: $decryptedUrl");exit;}
-    $getheaders = get_headers($decryptedUrl, 1, stream_context_create(['http' => ['method' => 'GET','header' => "User-Agent: $ua\r\n",'follow_location' => 0,'ignore_errors' => true]]));
-    if (!$getheaders || !isset($getheaders['Location'])) {header("Location: $decryptedUrl", true, 302);exit;}
-    $location = is_array($getheaders['Location']) ? end($getheaders['Location']) : $getheaders['Location'];
-    $mpdurl = strpos($location, '&') !== false ? substr($location, 0, strpos($location, '&')) : $location;
+    $decryptedUrl = str_replace('bpaita', 'bpaicatchupta', $decryptedUrl);
+    $decryptedUrl = str_replace('manifest', 'Manifest', $decryptedUrl);
+
+    if (strpos($decryptedUrl, 'bpaicatchupta') === false) {header("Location: $decryptedUrl"); exit;}
+    $ctx = stream_context_create(['http' => ['method' => 'GET', 'header' => "User-Agent: $ua\r\nAccept: */*\r\nConnection: close\r\n", 'follow_location' => 0, 'ignore_errors' => true]]);
+    $respHeaders = @get_headers($decryptedUrl, 1, $ctx);
+
+    if ($respHeaders && isset($respHeaders['Set-Cookie'])) {$cookies = $respHeaders['Set-Cookie'];
+        if (!is_array($cookies)) $cookies = [$cookies]; foreach ($cookies as $cookie) {
+            if (stripos($cookie, 'hdntl=') !== false) {preg_match('/hdntl=([^;]+)/', $cookie, $match);
+                if (!empty($match[1])) {$hdntl = trim($match[1]);
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!$hdntl && $respHeaders) {foreach ($respHeaders as $key => $val) {
+            if (strtolower($key) === 'hdntl') {
+                if (is_array($val)) $val = end($val); $hdntl = trim($val);
+                break;
+            }
+        }
+    }
+
+    if ($hdntl) {$cleanUrl = strtok($decryptedUrl, '?'); if (strpos($hdntl, 'hdntl=') === 0) {$mpdurl = $cleanUrl . '?' . $hdntl;} else {$mpdurl = $cleanUrl . '?hdntl=' . $hdntl;}}
+    if (!$mpdurl) {if (!$respHeaders || !isset($respHeaders['Location'])) {header("Location: $decryptedUrl", true, 302); exit;}
+        $location = is_array($respHeaders['Location']) ? end($respHeaders['Location']) : $respHeaders['Location'];
+        $mpdurl = strpos($location, '&') !== false ? substr($location, 0, strpos($location, '&')) : $location;
+    }
     $cacheData[$id] = ['url' => $mpdurl, 'updated_at' => time()];
     file_put_contents($cachePath, json_encode($cacheData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
