@@ -108,6 +108,10 @@
       </div>
     </div>
 
+    <div class="spinner" id="spinner">
+      Loading...
+    </div>
+
     <div id="postLoginActions" class="hidden">
       <div style="margin-top: 1rem;">
         <a href="playlist.php" download>
