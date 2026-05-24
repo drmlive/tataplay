@@ -14,20 +14,6 @@
       color: #fff;
     }
 
-    #splash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: black;
-      z-index: 1000;
-    }
-
-    #splash video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
     .container {
       display: none;
       background-color: #1c1c1c;
@@ -109,12 +95,6 @@
 </head>
 <body>
 
-  <div id="splash">
-    <video autoplay muted playsinline>
-      <source src="https://watch.tataplay.com/images/splash.mp4" type="video/mp4">
-    </video>
-  </div>
-
   <div class="container" id="app">
     <h2 id="pageTitle">Login with OTP</h2>
 
@@ -127,8 +107,6 @@
         <button id="verifyOtpBtn">Verify OTP</button>
       </div>
     </div>
-
-    <div class="spinner" id="spinner">? Loading...</div>
 
     <div id="postLoginActions" class="hidden">
       <div style="margin-top: 1rem;">
@@ -175,23 +153,21 @@
     function getPlaylistUrl() {
       return window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/') + 'playlist.php';
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const splash = document.getElementById('splash');
-      const video = splash.querySelector('video');
-      video.addEventListener('ended', async () => {
-        splash.remove();
-        app.style.display = 'block';
-
+    
+    window.addEventListener('DOMContentLoaded', async () => {
+      app.style.display = 'block';
+      try {
         const res = await fetch('app/check_login.php');
         const { exists } = await res.json();
         if (exists) {
           loginUI.classList.add('hidden');
           postLoginActions.classList.remove('hidden');
-          pageTitle.innerText = "You are already logged in.";
+          pageTitle.innerText = 'You are already logged in.';
           playlistInput.value = getPlaylistUrl();
         }
-      });
+      } catch (e) {
+        console.error(e);
+      }
     });
 
     sendBtn.addEventListener('click', async () => {
