@@ -20,11 +20,10 @@ if (isset($cacheData[$id])) {
 if (!$useCache) {
     $mpdurl = null;
     $hdntl = null;
-    $headers = ['Authorization: Bearer ' . $userToken,'subscriberId: ' . $subscriberId,];
-    $options = ['http' => ['method' => 'GET','header' => implode("\r\n", $headers),],];
-    $context = stream_context_create($options);
-    $response = @file_get_contents($content_api, false, $context);
-    if ($response === false) { http_response_code(500); echo 'Failed to fetch content data.'; exit; }
+    $headers = ['accept-language: en-US,en;q=0.9,da;q=0.8', 'Authorization: Bearer ' . $userToken, 'subscriberId: ' . $subscriberId, 'sec-ch-ua: "Chromium";v="155", "Not?A_Brand";v="24", "Google Chrome";v="155"', 'sec-fetch-dest: empty', 'user-agent: ' . $ua]; 
+    $ch = curl_init($content_api); curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_HTTPGET => true, CURLOPT_HTTPHEADER => $headers, CURLOPT_TIMEOUT => 30, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_FOLLOWLOCATION => true, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0, CURLOPT_ENCODING => '']); 
+    $response = curl_exec($ch); $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
+    if ($response === false || $httpCode < 200) { http_response_code(500); echo 'Failed to fetch content data.' . ($httpCode ? ' (HTTP ' . $httpCode . ')' : ''); exit; }
     $responseData = json_decode($response, true);
     if (!isset($responseData['data']['dashPlayreadyPlayUrl'])) { http_response_code(404); echo 'dashPlayreadyPlayUrl not found.'; exit;}
     $encrypteddashUrl = $responseData['data']['dashPlayreadyPlayUrl'];
