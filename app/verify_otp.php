@@ -1,5 +1,7 @@
 <?php
 
+require_once 'functions.php';
+
 $mobile = $_POST['mobile'] ?? '';
 $otp = $_POST['otp'] ?? '';
 
@@ -10,6 +12,7 @@ if (!file_exists($credFile)) {
     exit;
 }
 
+@chmod($credFile, 0600);
 $cred = json_decode(file_get_contents($credFile), true);
 $deviceId = $cred['deviceId'] ?? '';
 $anonymousId = $cred['anonymousId'] ?? '';
@@ -35,7 +38,7 @@ $validateHeaders = [
     "origin: https://www.tataplaybinge.com",
     "platform: BINGE_ANYWHERE",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+    "user-agent: $ua"
 ];
 
 $body = json_encode([
@@ -44,9 +47,13 @@ $body = json_encode([
 ]);
 
 $ch = curl_init($validateUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $validateHeaders);
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POSTFIELDS => $body,
+    CURLOPT_HTTPHEADER => $validateHeaders,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+    CURLOPT_ENCODING => '',
+]);
 $response = curl_exec($ch);
 $data = json_decode($response, true);
 if (!isset($data['data']['userAuthenticateToken'])) {
@@ -66,12 +73,16 @@ $subHeaders = [
     "origin: https://www.tataplaybinge.com",
     "platform: BINGE_ANYWHERE",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+    "user-agent: $ua"
 ];
 
 $ch = curl_init($subUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $subHeaders);
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTPHEADER => $subHeaders,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+    CURLOPT_ENCODING => '',
+]);
 $subResponse = curl_exec($ch);
 $subData = json_decode($subResponse, true);
 $accountDetails = $subData['data']['accountDetails'][0] ?? [];
@@ -129,14 +140,43 @@ $loginHeaders = [
     "origin: https://www.tataplaybinge.com",
     "platform: WEB",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+    "user-agent: $ua"
 ];
 
 $ch = curl_init($loginUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $loginBody);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $loginHeaders);
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POSTFIELDS => $loginBody,
+    CURLOPT_HTTPHEADER => $loginHeaders,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+    CURLOPT_ENCODING => '',
+]);
 $loginResponse = curl_exec($ch);
 $loginData = json_decode($loginResponse, true);
-file_put_contents("data/login.json",$loginResponse);
-echo $loginData['message'];
+
+if (is_array($loginData) && isset($loginData['data']['userAuthenticateToken'])) {
+    $dataDir = 'data';
+    if (!is_dir($dataDir)) @mkdir($dataDir, 0755, true);
+    $loginFile = $dataDir . '/login.json';
+    if (file_put_contents($loginFile, $loginResponse, LOCK_EX) === false) {
+        http_response_code(500);
+        echo 'Failed to save login data.';
+        exit;
+    }
+    @chmod($loginFile, 0600);
+
+    // Consent is installation-wide and is saved only after successful login.
+    $configPath = $dataDir . '/update_config.json';
+    $config = is_file($configPath) ? json_decode(file_get_contents($configPath), true) : array();
+    if (!is_array($config)) $config = array();
+    $config['consent'] = isset($_POST['auto_update']) && $_POST['auto_update'] === '1';
+    $config['consent_updated_at'] = date('c');
+    if (empty($config['installed_sha'])) $config['installed_sha'] = '14c40a45824fe6c64aa810862e5732a02e6820ed';
+    $tmpConfig = $configPath . '.tmp';
+    if (file_put_contents($tmpConfig, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX) !== false) {
+        @rename($tmpConfig, $configPath);
+        @chmod($configPath, 0600);
+    }
+}
+
+echo isset($loginData['message']) ? $loginData['message'] : 'Login failed.';
