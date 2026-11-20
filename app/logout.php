@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/functions.php';
+
 $loginFile = 'data/login.json';
 $guestCredsFile = 'data/guest-device.cred';
 $cacheUrlsFile = 'data/cache_urls.json';
@@ -33,14 +35,18 @@ $headers = [
     'sec-fetch-site: cross-site',
     "subscriberid: $subscriberId",
     "subscriptiontype: $subscriptionStatus",
-    'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+    'user-agent: ' . $ua,
     'x-authenticated-userid;'
 ];
 
 $ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_HTTPHEADER => $headers,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+    CURLOPT_ENCODING => '',
+]);
 $response = curl_exec($ch);
 $data = json_decode($response, true);
 echo $data['message'];
