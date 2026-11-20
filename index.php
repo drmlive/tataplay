@@ -1,3 +1,8 @@
+<?php
+session_start();
+if (empty($_SESSION['tp_updater_nonce'])) { $_SESSION['tp_updater_nonce'] = bin2hex(random_bytes(32)); }
+$tpUpdaterNonce = $_SESSION['tp_updater_nonce'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,6 +105,10 @@
 
     <div id="loginUI">
       <input type="text" id="mobile" placeholder="Enter Mobile Number" maxlength="10">
+      <label style="display:flex;align-items:flex-start;gap:9px;text-align:left;font-size:0.85rem;line-height:1.4;color:#ddd;margin:0.75rem 0;">
+        <input type="checkbox" id="autoUpdateConsent" style="width:auto;margin:2px 0 0;flex:0 0 auto;">
+        <span>Allow automatic updates from the official GitHub repository. Updates are checked when an MPD is fetched (at most once per UTC hour). Local modifications and personal data are preserved. You can change this later.</span>
+      </label>
       <button id="sendOtpBtn">Send OTP</button>
 
       <div id="otpSection" class="hidden">
@@ -128,6 +137,30 @@
     </div>
   </div>
 
+  <div class="container" id="updaterPanel" style="display:block;margin-top:18px;text-align:left;">
+    <h3 style="text-align:center;margin-bottom:8px;">GitHub updater</h3>
+    <p style="font-size:0.82rem;color:#bbb;line-height:1.45;">You can preview and manually update this installation without logging in. Automatic hourly MPD-triggered updates still require login and explicit consent.</p>
+      <div style="margin-top:1rem;text-align:left;font-size:0.85rem;color:#ddd;">
+        <div id="autoUpdateControls" class="hidden">
+          <label style="display:flex;align-items:flex-start;gap:9px;line-height:1.4;">
+            <input type="checkbox" id="manageAutoUpdate" style="width:auto;margin:2px 0 0;flex:0 0 auto;">
+            <span>Allow automatic updates from the official GitHub repository (checked during MPD fetching, at most once per UTC hour).</span>
+          </label>
+        </div>
+        <div id="lastUpdateInfo" style="margin-top:10px;padding:10px;background:#292929;border-radius:6px;font-size:0.8rem;line-height:1.55;">
+          <strong>Last successful update</strong><br>
+          <span id="lastUpdateAt">Not recorded yet</span><br>
+          <span id="lastUpdateSha" style="color:#aaa;"></span>
+          <div id="lastCheckedAt" style="color:#aaa;margin-top:4px;"></div>
+        </div>
+        <div id="updateStatus" style="margin-top:8px;color:#ddd;font-size:0.85rem;"></div>
+        <button id="previewUpdatesBtn" type="button" style="margin-top:0.6rem;background-color:#315b8a;">Preview changes</button>
+        <div id="updatePreview" style="display:none;margin-top:10px;padding:10px;background:#292929;border-radius:6px;text-align:left;font-size:0.8rem;line-height:1.5;"></div>
+        <button id="applyUpdatesBtn" type="button" style="margin-top:0.6rem;background-color:#287a45;" disabled>Apply safe updates</button>
+        <button id="forceUpdatesBtn" type="button" style="margin-top:0.6rem;background-color:#a05a19;">Force update (overwrite local changes)</button>
+      </div>
+  </div>
+
   <div id="toast" class="toast"></div>
 
   <script>
@@ -142,6 +175,7 @@
     const toast = document.getElementById('toast');
     const playlistInput = document.getElementById('playlistUrl');
     const app = document.getElementById('app');
+    const updaterNonce = <?php echo json_encode($tpUpdaterNonce); ?>;
 
     const showSpinner = () => spinner.style.display = 'block';
     const hideSpinner = () => spinner.style.display = 'none';
@@ -162,12 +196,18 @@
       app.style.display = 'block';
       try {
         const res = await fetch('app/check_login.php');
-        const { exists } = await res.json();
-        if (exists) {
+        const loginInfo = await res.json();
+        document.getElementById('lastUpdateAt').innerText = loginInfo.last_update_at || 'Not recorded yet';
+        document.getElementById('lastUpdateSha').innerText = loginInfo.last_update_sha ? ('Commit: ' + loginInfo.last_update_sha.substring(0, 12)) : '';
+        document.getElementById('lastCheckedAt').innerText = loginInfo.last_checked_at ? ('Last GitHub check (UTC): ' + loginInfo.last_checked_at) : 'No GitHub check recorded yet';
+        document.getElementById('updateStatus').innerText = loginInfo.update_status || 'Manual updates are available without login.';
+        if (loginInfo.exists) {
           loginUI.classList.add('hidden');
           postLoginActions.classList.remove('hidden');
+          document.getElementById('autoUpdateControls').classList.remove('hidden');
           pageTitle.innerText = 'You are already logged in.';
           playlistInput.value = getPlaylistUrl();
+          document.getElementById('manageAutoUpdate').checked = !!loginInfo.auto_update;
         }
       } catch (e) {
         console.error(e);
@@ -216,7 +256,7 @@
       const res = await fetch('app/verify_otp.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `mobile=${mobile}&otp=${otp}`
+        body: new URLSearchParams({ mobile, otp, auto_update: document.getElementById('autoUpdateConsent').checked ? '1' : '0' })
       });
       const text = await res.text();
       hideSpinner();
@@ -226,6 +266,11 @@
         loginUI.classList.add('hidden');
         postLoginActions.classList.remove('hidden');
         playlistInput.value = getPlaylistUrl();
+        document.getElementById('autoUpdateControls').classList.remove('hidden');
+        document.getElementById('manageAutoUpdate').checked = document.getElementById('autoUpdateConsent').checked;
+        document.getElementById('updateStatus').innerText = document.getElementById('manageAutoUpdate').checked
+          ? 'Automatic updates enabled. GitHub is checked during MPD fetching, at most once per UTC hour.'
+          : 'Automatic updates are disabled. Manual preview and updates remain available.';
         if (window.otpTimerInterval) {
           clearInterval(window.otpTimerInterval);
           window.otpTimerInterval = null;
@@ -249,6 +294,102 @@
       if (e.key === 'Enter') {
         document.getElementById('verifyOtpBtn').click();
       }
+    });
+
+    document.getElementById('manageAutoUpdate').addEventListener('change', async (event) => {
+      const toggle = event.target;
+      toggle.disabled = true;
+      try {
+        const res = await fetch('app/set_auto_update.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ enabled: toggle.checked ? '1' : '0' })
+        });
+        const result = await res.json();
+        showToast(result.message || 'Could not save preference.');
+        if (!result.success) toggle.checked = !toggle.checked;
+        else if (!toggle.checked) document.getElementById('updateStatus').innerText = 'Automatic updates are disabled.';
+        else document.getElementById('updateStatus').innerText = 'Automatic updates enabled. They will be checked during MPD fetching, at most once per UTC hour.';
+      } catch (e) {
+        toggle.checked = !toggle.checked;
+        showToast('Could not save update preference.');
+      }
+      toggle.disabled = false;
+    });
+
+    async function updaterRequest(action) {
+      const status = document.getElementById('updateStatus');
+      status.innerText = action === 'preview' ? 'Fetching GitHub changes...' : 'Applying update...';
+      const response = await fetch('app/run_update.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action, nonce: updaterNonce })
+      });
+      const result = await response.json();
+      status.innerText = result.message || 'Updater finished.';
+      if (action === 'preview' && result.success) {
+        const panel = document.getElementById('updatePreview');
+        panel.style.display = 'block';
+        panel.replaceChildren();
+        const summary = document.createElement('div');
+        summary.innerHTML = '<strong>GitHub commit:</strong> ';
+        summary.appendChild(document.createTextNode((result.latest_sha || '').substring(0, 12)));
+        panel.appendChild(summary);
+        const files = result.files || [];
+        const counts = result.counts || {};
+        const countLine = document.createElement('div');
+        countLine.style.color = '#bbb';
+        countLine.textContent = 'Changed/locally different files: ' + files.length +
+          ' | upstream changes: ' + (counts.upstream_changed || 0) +
+          ' | local modifications: ' + (counts.local_modified || 0) +
+          ' | new files: ' + (counts.new_file || 0);
+        panel.appendChild(countLine);
+        if (!files.length) {
+          const none = document.createElement('p'); none.textContent = 'No file changes found.'; panel.appendChild(none);
+        } else {
+          const list = document.createElement('ul'); list.style.margin = '8px 0 0 18px';
+          files.forEach(file => {
+            const li = document.createElement('li');
+            li.textContent = file.path + ' — ' + file.status.replace(/_/g, ' ');
+            list.appendChild(li);
+          });
+          panel.appendChild(list);
+        }
+        document.getElementById('applyUpdatesBtn').disabled = !files.some(f => f.status === 'upstream_changed' || f.status === 'new_file');
+      }
+      if (action === 'apply' || action === 'force') {
+        document.getElementById('lastUpdateAt').innerText = result.last_update_at || 'No successful update recorded';
+        document.getElementById('lastUpdateSha').innerText = result.last_update_sha ? ('Commit: ' + result.last_update_sha.substring(0, 12)) : '';
+        document.getElementById('lastCheckedAt').innerText = result.last_checked_at ? ('Last GitHub check (UTC): ' + result.last_checked_at) : '';
+        if (result.success) document.getElementById('applyUpdatesBtn').disabled = true;
+      }
+      showToast(result.message || 'Updater finished.');
+      return result;
+    }
+
+    document.getElementById('previewUpdatesBtn').addEventListener('click', async () => {
+      const button = document.getElementById('previewUpdatesBtn');
+      button.disabled = true; button.innerText = 'Loading preview...';
+      try { await updaterRequest('preview'); }
+      catch (e) { document.getElementById('updateStatus').innerText = 'Preview failed. Check PHP error logs.'; }
+      finally { button.disabled = false; button.innerText = 'Preview changes'; }
+    });
+
+    document.getElementById('applyUpdatesBtn').addEventListener('click', async () => {
+      if (!confirm('Apply safe updates? Locally modified files will be skipped. Existing files will be backed up.')) return;
+      const button = document.getElementById('applyUpdatesBtn'); button.disabled = true; button.innerText = 'Updating...';
+      try { await updaterRequest('apply'); }
+      catch (e) { document.getElementById('updateStatus').innerText = 'Update failed. Check PHP error logs.'; }
+      finally { button.disabled = false; button.innerText = 'Apply safe updates'; }
+    });
+
+    document.getElementById('forceUpdatesBtn').addEventListener('click', async () => {
+      const ok = confirm('FORCE UPDATE: This overwrites locally modified files in get-mpd.php, index.php, playlist.php and managed app files. Backups are created first. Continue?');
+      if (!ok) return;
+      const button = document.getElementById('forceUpdatesBtn'); button.disabled = true; button.innerText = 'Force updating...';
+      try { await updaterRequest('force'); }
+      catch (e) { document.getElementById('updateStatus').innerText = 'Force update failed. Check PHP error logs.'; }
+      finally { button.disabled = false; button.innerText = 'Force update (overwrite local changes)'; }
     });
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
