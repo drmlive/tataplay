@@ -6,7 +6,12 @@ header('Content-Type: audio/x-mpegurl');
 header('Content-Disposition: attachment; filename="playlist.m3u"');
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $origin_api);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+    CURLOPT_ENCODING => '',
+    CURLOPT_USERAGENT => $ua,
+]);
 $response = curl_exec($ch);
 
 $data = json_decode($response, true);
@@ -89,5 +94,4 @@ foreach ($channels as $channel) {
     echo "#EXTVLCOPT:http-user-agent={$ua}\n";
     echo "{$channel_live}\n\n";
 }
-
 
