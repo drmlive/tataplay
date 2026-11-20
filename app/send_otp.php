@@ -1,5 +1,7 @@
 <?php
 
+require_once 'functions.php';
+
 $mobile = $_POST['mobile'] ?? '';
 if (!preg_match('/^[6-9]\d{9}$/', $mobile)) {
     http_response_code(400);
@@ -17,8 +19,12 @@ if (!file_exists($credDir)) {if (!mkdir($credDir, 0777, true)) {http_response_co
 if (!file_exists($credFile)) {
     $deviceId = generateNumericUuid();
     $ch = curl_init('https://tb.tapi.videoready.tv/binge-mobile-services/pub/api/v1/user/guest/register');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+        CURLOPT_ENCODING => '',
+    ]);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'accept: application/json, text/plain, */*',
         'authorization: bearer undefined',
@@ -26,7 +32,7 @@ if (!file_exists($credFile)) {
         'referer: https://www.tataplaybinge.com/',
         "deviceid: $deviceId",
         'origin: https://www.tataplaybinge.com',
-        'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        'user-agent: ' . $ua,
         'Expect:'
     ]);
 
@@ -35,10 +41,15 @@ if (!file_exists($credFile)) {
     $anonymousId = $guestData['data']['anonymousId'] ?? '';
 
     if ($anonymousId) {
-        file_put_contents($credFile, json_encode([
+        if (file_put_contents($credFile, json_encode([
             'deviceId' => $deviceId,
             'anonymousId' => $anonymousId
-        ], JSON_PRETTY_PRINT));
+        ], JSON_PRETTY_PRINT), LOCK_EX) === false) {
+            http_response_code(500);
+            echo 'Failed to save device credentials.';
+            exit;
+        }
+        @chmod($credFile, 0600);
     } else {
         http_response_code(500);
         echo "Failed to register device.";
@@ -46,6 +57,7 @@ if (!file_exists($credFile)) {
     }
 }
 
+if (is_file($credFile)) @chmod($credFile, 0600);
 $cred = json_decode(@file_get_contents($credFile), true);
 $deviceId = $cred['deviceId'] ?? '';
 $anonymousId = $cred['anonymousId'] ?? '';
@@ -67,12 +79,16 @@ $headers = [
     "origin: https://www.tataplaybinge.com",
     "platform: BINGE_ANYWHERE",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+    "user-agent: $ua"
 ];
 
 $ch = curl_init($url);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt_array($ch, [
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+    CURLOPT_ENCODING => '',
+]);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 $response = curl_exec($ch);
 $data = json_decode($response, true);
