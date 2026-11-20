@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/functions.php';
+require_once 'functions.php';
 
 $loginFile = 'data/login.json';
 $guestCredsFile = 'data/guest-device.cred';
