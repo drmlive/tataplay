@@ -158,7 +158,7 @@ if (is_array($loginData) && isset($loginData['data']['userAuthenticateToken'])) 
     $dataDir = 'data';
     if (!is_dir($dataDir)) @mkdir($dataDir, 0755, true);
     $loginFile = $dataDir . '/login.json';
-    if (file_put_contents($loginFile, $loginResponse, LOCK_EX) === false) {
+    if (file_put_contents($loginFile, $loginResponse) === false) {
         http_response_code(500);
         echo 'Failed to save login data.';
         exit;
@@ -173,7 +173,7 @@ if (is_array($loginData) && isset($loginData['data']['userAuthenticateToken'])) 
     $config['consent_updated_at'] = date('c');
     if (empty($config['installed_sha'])) $config['installed_sha'] = '14c40a45824fe6c64aa810862e5732a02e6820ed';
     $tmpConfig = $configPath . '.tmp';
-    if (file_put_contents($tmpConfig, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX) !== false) {
+    if (file_put_contents($tmpConfig, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) !== false) {
         @rename($tmpConfig, $configPath);
         @chmod($configPath, 0600);
     }
