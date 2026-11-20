@@ -26,7 +26,7 @@ if (!is_dir($dir) && !mkdir($dir, 0755, true)) {
 }
 $tmp = $configPath . '.tmp';
 $json = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-if ($json === false || file_put_contents($tmp, $json, LOCK_EX) === false || !rename($tmp, $configPath)) {
+if ($json === false || file_put_contents($tmp, $json) === false || !rename($tmp, $configPath)) {
     @unlink($tmp);
     http_response_code(500);
     echo json_encode(array('success' => false, 'message' => 'Could not save update preference.'));
