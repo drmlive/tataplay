@@ -44,7 +44,7 @@ if (!file_exists($credFile)) {
         if (file_put_contents($credFile, json_encode([
             'deviceId' => $deviceId,
             'anonymousId' => $anonymousId
-        ], JSON_PRETTY_PRINT), LOCK_EX) === false) {
+        ], JSON_PRETTY_PRINT)) === false) {
             http_response_code(500);
             echo 'Failed to save device credentials.';
             exit;
