@@ -11,11 +11,8 @@ if (!function_exists('tpUpdateConfigPath')) {
     function tpUpdateWriteJson($path, $data) {
         $dir = dirname($path);
         if (!is_dir($dir) && !@mkdir($dir, 0755, true)) return false;
-        $tmp = $path . '.tmp.' . getmypid();
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if ($json === false || @file_put_contents($tmp, $json, LOCK_EX) === false) return false;
-        @chmod($tmp, 0600);
-        if (!@rename($tmp, $path)) { @unlink($tmp); return false; }
+        if ($json === false || @file_put_contents($path, $json) === false) return false;
         @chmod($path, 0600);
         return true;
     }
@@ -93,7 +90,7 @@ if (!function_exists('tpUpdateConfigPath')) {
     }
     function tpApplyUpdateInternal($forceLocal) {
         $p=tpBuildUpdatePlan(); if(!$p['ok']) return array('success'=>false,'message'=>$p['error']);
-        $root=dirname(__DIR__); $data=__DIR__.'/data'; if(!is_dir($data) && !@mkdir($data,0755,true)) return array('success'=>false,'message'=>'Cannot create updater data directory.');
+        $root=dirname(__DIR__); $data='data'; if(!is_dir($data) && !@mkdir($data,0755,true)) return array('success'=>false,'message'=>'Cannot create updater data directory.');
         $pending=array();
         foreach($p['files'] as $f) {
             $apply = $forceLocal ? !$f['local_matches_latest'] : in_array($f['status'],array('upstream_changed','new_file'),true);
@@ -115,8 +112,8 @@ if (!function_exists('tpUpdateConfigPath')) {
             foreach($pending as $path=>$contents) {
                 $target=$root.'/'.$path; if(!is_dir(dirname($target)) && !@mkdir(dirname($target),0755,true)) throw new Exception('Cannot create directory for '.$path);
                 if(is_file($target)) { $b=$backup.'/'.$path; if(!is_dir(dirname($b)) && !@mkdir(dirname($b),0755,true)) throw new Exception('Cannot create backup directory for '.$path); if(!@copy($target,$b)) throw new Exception('Cannot back up '.$path); }
-                $tmp=$target.'.update-'.getmypid(); if(@file_put_contents($tmp,$contents,LOCK_EX)===false) throw new Exception('Cannot write '.$path);
-                @chmod($tmp,is_file($target)?(fileperms($target)&0777):0644); if(!@rename($tmp,$target)) { @unlink($tmp); throw new Exception('Cannot replace '.$path); } $applied[]=$path;
+                if(@file_put_contents($target,$contents)===false) throw new Exception('Cannot write '.$path);
+                @chmod($target,is_file($target)?(fileperms($target)&0777):0644); $applied[]=$path;
             }
         } catch(Exception $e) {
             foreach(array_reverse($applied) as $path) { $target=$root.'/'.$path; $b=$backup.'/'.$path; if(is_file($b)) @copy($b,$target); else @unlink($target); }
@@ -131,9 +128,8 @@ if (!function_exists('tpUpdateConfigPath')) {
         if(!$manual && empty($cfg['consent'])) return array('success'=>false,'enabled'=>false,'message'=>'Automatic updates are disabled.');
         $hour=gmdate('Y-m-d-H');
         if(!$manual && !empty($cfg['last_check_utc_hour']) && hash_equals((string)$cfg['last_check_utc_hour'],$hour)) return array('success'=>true,'enabled'=>true,'message'=>isset($cfg['last_status'])?$cfg['last_status']:'Already checked this UTC hour.');
-        $data=__DIR__.'/data'; if(!is_dir($data) && !@mkdir($data,0755,true)) return array('success'=>false,'message'=>'Cannot create updater data directory.');
-        $lock=@fopen($data.'/update.lock','c'); if(!$lock || !@flock($lock,LOCK_EX|LOCK_NB)) { if($lock) fclose($lock); return array('success'=>false,'message'=>'Another update operation is already running.'); }
+        $data='data'; if(!is_dir($data) && !@mkdir($data,0755,true)) return array('success'=>false,'message'=>'Cannot create updater data directory.');
         $result=tpApplyUpdateInternal($forceLocal); $cfg=tpUpdateReadJson($path); $cfg['last_check_utc_hour']=$hour; $cfg['last_checked_at']=gmdate('c'); $cfg['last_check']=time(); $cfg['last_status']=$result['message']; tpUpdateWriteJson($path,$cfg);
-        @flock($lock,LOCK_UN); @fclose($lock); $result['enabled']=true; return $result;
+        $result['enabled']=true; return $result;
     }
 }
