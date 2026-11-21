@@ -79,7 +79,7 @@ $headers = [
     "origin: https://www.tataplaybinge.com",
     "platform: BINGE_ANYWHERE",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: $ua"
+    "user-agent: $api_ua"
 ];
 
 $ch = curl_init($url);
