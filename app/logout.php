@@ -35,7 +35,7 @@ $headers = [
     'sec-fetch-site: cross-site',
     "subscriberid: $subscriberId",
     "subscriptiontype: $subscriptionStatus",
-    'user-agent: ' . $ua,
+    'user-agent: ' . $api_ua,
     'x-authenticated-userid;'
 ];
 
