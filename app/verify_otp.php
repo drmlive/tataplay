@@ -38,7 +38,7 @@ $validateHeaders = [
     "origin: https://www.tataplaybinge.com",
     "platform: BINGE_ANYWHERE",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: $ua"
+    "user-agent: $api_ua"
 ];
 
 $body = json_encode([
@@ -73,7 +73,7 @@ $subHeaders = [
     "origin: https://www.tataplaybinge.com",
     "platform: BINGE_ANYWHERE",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: $ua"
+    "user-agent: $api_ua"
 ];
 
 $ch = curl_init($subUrl);
@@ -140,7 +140,7 @@ $loginHeaders = [
     "origin: https://www.tataplaybinge.com",
     "platform: WEB",
     "referer: https://www.tataplaybinge.com/",
-    "user-agent: $ua"
+    "user-agent: $api_ua"
 ];
 
 $ch = curl_init($loginUrl);
