@@ -32,7 +32,7 @@ if (!file_exists($credFile)) {
         'referer: https://www.tataplaybinge.com/',
         "deviceid: $deviceId",
         'origin: https://www.tataplaybinge.com',
-        'user-agent: ' . $ua,
+        'user-agent: ' . $api_ua,
         'Expect:'
     ]);
 
